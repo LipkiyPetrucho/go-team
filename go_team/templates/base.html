@@ -1,0 +1,43 @@
+ {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}GoTeam{% endblock %}</title>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div id="header">
+      <a href="/" class="logo">GoTeam</a>
+      <ul class="menu">
+        {% if request.user.is_authenticated %}
+          <li><a href="{% url 'profile' %}">Профиль</a></li>
+          <li>
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: none; color: #FFFFFF; cursor: pointer; padding: 0;">
+                    Выйти
+                </button>
+            </form>
+          </li>
+        {% else %}
+          <li><a href="{% url 'login' %}">Войти</a></li>
+        {% endif %}
+        {% if not request.user.is_authenticated %}
+          <li><a href="{% url 'register' %}">Регистрация</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    <div id="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        // DOM-модель загружена
+        {% block domready %}
+        {% endblock %}
+      })
+    </script>
+</body>
+</html>

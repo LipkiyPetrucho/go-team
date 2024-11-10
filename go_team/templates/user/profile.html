@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<h1>Профиль пользователя</h1>
+<div class="module">
+    <p><strong>Имя пользователя:</strong> {{ request.user.username }}</p>
+    <p><strong>Email:</strong> {{ request.user.email }}</p>
+    {% if request.user.profile %}
+        <p><strong>Биография:</strong> {{ request.user.profile.bio }}</p>
+        <p><strong>Местоположение:</strong> {{ request.user.profile.location }}</p>
+        <p><strong>Дата рождения:</strong> {{ request.user.profile.birth_date }}</p>
+        {% if request.user.profile.avatar %}
+            <img src="{{ request.user.profile.avatar.url }}" alt="Аватар пользователя" width="150" height="150">
+        {% else %}
+            <p>Аватар не загружен</p>
+        {% endif %}
+    {% endif %}
+    <a href="{% url 'profile_edit' %}">Редактировать профиль</a> |
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Выйти</button>
+    </form>
+</div>
+{% endblock %}
