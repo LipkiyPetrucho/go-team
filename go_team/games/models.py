@@ -1,8 +1,11 @@
+import logging
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 
+logger = logging.getLogger(__name__)
 
 class Game(models.Model):
     SPORT_CHOICES = (
@@ -63,6 +66,7 @@ class Game(models.Model):
 
     def update_status(self):
         now = timezone.now()
+        logger.debug(f"Checking status at {now}. Current status: {self.status}")
         if self.status in ["finished", "canceled"]:
             return
         if now >= self.end_time:
@@ -71,7 +75,7 @@ class Game(models.Model):
             self.status = "in_progress"
         else:
             self.status = "open"
-        self.save()
+        logger.debug(f"Updated status to: {self.status}")
 
     def save(self, *args, **kwargs):
         self.update_status()

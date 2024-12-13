@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Список игр{% endblock %}
+
+{% block content %}
+<h1>Список игр</h1>
+<a href="{% url 'games:game_create' %}" class="button">Создать новую игру</a>
+<ul>
+    {% for game in games %}
+        <li>
+            <a href="{% url 'games:game_detail' game.pk %}">{{ game.sport|capfirst }} игра в {{ game.location }}</a>
+            - Начало: {{ game.start_time }}
+            - Статус: {{ game.status|capfirst }}
+        </li>
+    {% empty %}
+        <li>Нет доступных игр.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

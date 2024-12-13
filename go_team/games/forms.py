@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import Select, NumberInput, Textarea
+from django.forms import Select, NumberInput, Textarea, TextInput, ClearableFileInput
 
 from games.models import Game
 
@@ -9,10 +9,10 @@ class GameForm(forms.ModelForm):
         model = Game
         fields = [
             "sport",
-            "max_players",
             "location",
             "start_time",
             "duration",
+            "max_players",
             "price",
             "description",
             "image",
@@ -30,7 +30,11 @@ class GameForm(forms.ModelForm):
 
         widgets = {
             "sport": Select(),
+            'location': TextInput(),
+            "start_time": forms.DateTimeInput(attrs={"type": "datetime-local"}),
+            "duration": forms.TimeInput(attrs={"type": "time"}),
             "max_players": NumberInput(attrs={"step": "1"}),
+            "price": NumberInput(attrs={"step": "10"}),
             "description": Textarea(
                 attrs={
                     "cols": 30,
@@ -39,7 +43,5 @@ class GameForm(forms.ModelForm):
                     "aria-label": "default input example",
                 }
             ),
-            "price": NumberInput(attrs={"step": "10"}),
-            "start_time": forms.DateTimeInput(attrs={"type": "datetime-local"}),
-            "duration": forms.TimeInput(attrs={"type": "time"}),
+            'image': ClearableFileInput()
         }

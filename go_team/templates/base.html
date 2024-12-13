@@ -27,6 +27,17 @@
           <li><a href="{% url 'register' %}">Регистрация</a></li>
         {% endif %}
       </ul>
+      {% if request.user.is_authenticated %}
+            <ul class="menu">
+                <li {% if section == 'dashboard' %} class='selected'{% endif %}>
+                    <a href="{% url 'home' %}">Главная</a>
+                </li>
+                <li {% if section == "games" %} class="selected"{% endif %}>
+                    <a href="{% url 'games:game_list' %}">Игры</a>
+                </li>
+            </ul>
+        {% endif %}
+
     </div>
     <div id="content">
       {% block content %}

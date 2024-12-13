@@ -23,9 +23,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # apps
     "user",
+    "games",
     # libs
     "rest_framework",
     "rest_framework_simplejwt",
+    'django_extensions', #TODO: remove in product
 ]
 
 MIDDLEWARE = [
@@ -86,7 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
@@ -136,4 +138,40 @@ SIMPLE_JWT = {
     "SIGNING_KEY": os.getenv("SECRET_KEY"),
     "VERIFYING_KEY": None,
     "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,  # Важно сохранить существующие логгеры
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "debug.log"),
+            'formatter': 'verbose',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+        "django.security.csrf": {
+            "handlers": ["file"],
+            "level": "WARNING",
+            "propagate": False,
+            },
+        "games": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
 }

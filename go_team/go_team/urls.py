@@ -21,5 +21,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("user/", include("user.urls")),
     path("api/", include("user.api.urls")),
+    path("games/", include("games.urls")),
+    path("api/", include("games.api.urls")),
     path("", home_view, name="home"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Детали игры{% endblock %}
+
+{% block content %}
+<h1>{{ game.sport|capfirst }} игра</h1>
+<p><strong>Место проведения:</strong> {{ game.location }}</p>
+<p><strong>Время начала:</strong> {{ game.start_time }}</p>
+<p><strong>Длительность:</strong> {{ game.duration }}</p>
+<p><strong>Время окончания:</strong> {{ game.end_time }}</p>
+<p><strong>Общая цена:</strong> {{ game.total_price }}</p>
+<p><strong>Цена с игрока:</strong> {{ game.price_per_player }}</p>
+<p><strong>Описание:</strong> {{ game.description }}</p>
+<p><strong>Статус:</strong> {{ game.status|capfirst }}</p>
+<p>Текущее время: {{ now }}</p>
+<p>Время начала: {{ game.start_time }}</p>
+<p>Время окончания: {{ game.end_time }}</p>
+
+{% if game.image %}
+    <img src="{{ game.image.url }}" alt="Игра изображение" width="300">
+{% endif %}
+
+{% if request.user in game.players.all %}
+    <form method="post" action="{% url 'games:game_leave' game.pk %}">
+        {% csrf_token %}
+        <button type="submit">Покинуть игру</button>
+    </form>
+{% else %}
+    {% if game.players.count < game.max_players and game.status == 'open' %}
+        <form method="post" action="{% url 'games:game_join' game.pk %}">
+            {% csrf_token %}
+            <button type="submit">Присоединиться к игре</button>
+        </form>
+    {% endif %}
+{% endif %}
+
+{% if request.user == game.created_by %}
+    <a href="{% url 'games:game_edit' game.pk %}" class="button">Редактировать игру</a> |
+    <form method="post" action="{% url 'games:game_delete' game.pk %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="button">Удалить игру</button>
+    </form>
+{% endif %}
+
+<h2>Игроки:</h2>
+<ul>
+    {% for player in game.players.all %}
+        <li>{{ player.username }}</li>
+    {% empty %}
+        <li>Нет игроков.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

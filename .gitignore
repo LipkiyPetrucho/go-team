@@ -143,6 +143,7 @@ cython_debug/
 
 ### IDEs ###
 .idea/
+.idea/workspace.xml
 .idea
 code.txt
 project_to_file.py

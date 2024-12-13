@@ -22,7 +22,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 class GameViewSet(viewsets.ModelViewSet):
     queryset = Game.objects.all()
     serializer_class = GameSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated] #TODO: added IsOwnerOrReadOnly if necessary
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
